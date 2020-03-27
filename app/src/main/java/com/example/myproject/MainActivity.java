@@ -5,19 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.*;
+
+import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
-    private Button showMoney;
-    private Button showTag;
+    // private Button showMoney;
+    // private Button showTag;
+    private TextView moneyText;
+
+    private int moneyCounter = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        showMoney = findViewById(R.id.button_make_rain);
-        showTag = findViewById(R.id.button_show_tag);
+        // showMoney = findViewById(R.id.button_make_rain);
+        // showTag = findViewById(R.id.button_show_tag);
+        moneyText = findViewById(R.id.money_text);
 
         // showMoney.setOnClickListener(new View.OnClickListener() {
             // @Override
@@ -36,7 +42,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void makeItRain(View v) {
-        Log.d("MIR", "makeItRain: Trapped");
+        // преобразует число в валюту
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        moneyCounter += 1000;
+        // устанавливаем текст
+        moneyText.setText(String.valueOf(numberFormat.format(moneyCounter)));
+        Log.d("MIR", "makeItRain: Trapped " + moneyCounter);
         // System.out.println("Hello!");
     }
 
