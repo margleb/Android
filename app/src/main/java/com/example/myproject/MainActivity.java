@@ -47,18 +47,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.false_button:
-                Toast.makeText(MainActivity.this, "false", Toast.LENGTH_SHORT).show();
+                checkAnswer(false);
                 break;
             case R.id.true_button:
-                Toast.makeText(MainActivity.this, "true", Toast.LENGTH_SHORT).show();
+                checkAnswer(true);
                 break;
             case R.id.next_button:
                 // go to next question (делит с остатком)
                 currentQuestionIndex = (currentQuestionIndex + 1) % questionBank.length;
-                System.out.println(currentQuestionIndex);
-                Log.d("Current", "onClick: " + currentQuestionIndex);
-                questionTextView.setText(questionBank[currentQuestionIndex].getAnswerResId());
+                updateQuestion();
         }
+    }
+
+    private void updateQuestion() {
+        Log.d("Current", "onClick: " + currentQuestionIndex);
+        questionTextView.setText(questionBank[currentQuestionIndex].getAnswerResId());
+    }
+
+    private void checkAnswer(boolean userChooseCorrect) {
+        boolean answerIsTrue = questionBank[currentQuestionIndex].isAnswerTrue();
+        int toastMessageId = 0;
+        if(userChooseCorrect == answerIsTrue) {
+            toastMessageId = R.string.correct_answer;
+        } else {
+            toastMessageId = R.string.wrong_answer;
+        }
+        Toast.makeText(MainActivity.this, toastMessageId, Toast.LENGTH_SHORT).show();
     }
 
 }
