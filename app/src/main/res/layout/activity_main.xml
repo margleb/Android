@@ -15,9 +15,30 @@
 
     <TextView
         android:id="@+id/answer_text_view"
-        android:text="@string/test_qestion"
+        android:text="@string/question_declaration"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
         android:padding="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="34dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/true_button"
+            android:text="@string/true_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/false_button"
+            android:text="@string/false_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 
 </LinearLayout>
