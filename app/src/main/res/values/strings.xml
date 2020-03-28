@@ -7,4 +7,5 @@
     <string name="question_amendments">The (U.S.) Declaration has 26 amendments.</string>
     <string name="correct_answer">That\'s correct</string>
     <string name="wrong_answer">That\'s incorrect</string>
+    <string name="next_text">next</string>
 </resources>
