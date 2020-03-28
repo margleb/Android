@@ -30,11 +30,13 @@
         <Button
             android:id="@+id/true_button"
             android:text="@string/true_text"
+            android:textColor="@color/colorWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/false_button"
             android:text="@string/false_text"
+            android:textColor="@color/colorWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -43,15 +45,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <ImageButton
-            android:contentDescription="@string/next_text"
+            android:contentDescription="@string/prev_text"
             android:id="@+id/prev_button"
-            android:src="@android:drawable/ic_media_previous"
+            android:src="@drawable/baseline_navigate_before_white_18dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <ImageButton
             android:contentDescription="@string/next_text"
             android:id="@+id/next_button"
-            android:src="@android:drawable/ic_media_next"
+            android:src="@drawable/baseline_navigate_next_white_18dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
