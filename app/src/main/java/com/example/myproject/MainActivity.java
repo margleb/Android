@@ -2,6 +2,7 @@ package com.example.myproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,6 +51,22 @@ public class MainActivity extends AppCompatActivity {
         moneyText.setText(String.valueOf(numberFormat.format(moneyCounter)));
         Log.d("MIR", "makeItRain: Trapped " + moneyCounter);
         // System.out.println("Hello!");
+        // Получение цвета из color.xml ресурса
+        // moneyText.getResources().getColor(R.color.myColor);
+        switch(moneyCounter) {
+            case 2000 :
+                // при нажатии на кнопку изменяется цвет
+                moneyText.setTextColor(Color.BLACK);
+                break;
+            case 4000 :
+                moneyText.setTextColor(Color.YELLOW);
+                break;
+            case 6000 :
+                moneyText.setTextColor(Color.GREEN);
+                break;
+            default:
+                break;
+        }
     }
 
 
