@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button falseButton;
     private Button trueButton;
     private ImageButton nextButton;
+    private ImageButton prevButton;
     private TextView questionTextView;
     // для контроля на каком на данный момент мы вопросе
     private int currentQuestionIndex = 0;
@@ -35,11 +36,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         falseButton = findViewById(R.id.false_button);
         trueButton = findViewById(R.id.true_button);
         nextButton = findViewById(R.id.next_button);
+        prevButton = findViewById(R.id.prev_button);
         questionTextView = findViewById(R.id.answer_text_view);
         // кнопки, импламентирует View.OnClickListener
         falseButton.setOnClickListener(this);
         trueButton.setOnClickListener(this);
         nextButton.setOnClickListener(this);
+        prevButton.setOnClickListener(this);
 
     }
 
@@ -56,6 +59,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // go to next question (делит с остатком)
                 currentQuestionIndex = (currentQuestionIndex + 1) % questionBank.length;
                 updateQuestion();
+                break;
+            case R.id.prev_button:
+                // go to next question (делит с остатком)
+                if(currentQuestionIndex != 0) {
+                    currentQuestionIndex = (currentQuestionIndex - 1);
+                    updateQuestion();
+                } else {
+                    currentQuestionIndex = questionBank.length - 1;
+                    updateQuestion();
+                }
+                break;
+            default:
+                break;
         }
     }
 
