@@ -37,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
     // работает, благодаря указанаму атрибуту onclick в xml
     public void showTag(View v) {
         // по идеи должен выводить информацию в лог по событию onClick
-        Log.d("MYTAG", "onClick: Show Money");
-        // System.out.println("Hello!");
+        // Log.d("MYTAG", "onClick: Show Money");
+        // показывает типа всплывающего окна
+        Toast.makeText(getApplicationContext(), R.string.app_name, Toast.LENGTH_SHORT).show();
     }
 
     public void makeItRain(View v) {
