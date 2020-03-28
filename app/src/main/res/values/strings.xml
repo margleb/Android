@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">MyProject</string>
-    <string name="question_declaration">The (U.S.) Declaration of Independence was Adopted in 1776.</string>
     <string name="true_text">true</string>
     <string name="false_text">false</string>
+
+    <string name="question_declaration">The (U.S.) Declaration of Independence was Adopted in 1776.</string>
+    <string name="question_amendments">The (U.S.) Declaration has 26 amendments.</string>
+    <string name="correct_answer">That\'s correct</string>
+    <string name="wrong_answer">That\'s incorrect</string>
 </resources>
