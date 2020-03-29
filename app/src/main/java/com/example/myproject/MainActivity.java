@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // создает намерение и переход на новый activity
                 Intent intent = new Intent(MainActivity.this, ShowGuess.class);
+                intent.putExtra("guess", "Hello there");
                 startActivity(intent);
             }
         });
