@@ -2,11 +2,15 @@ package com.example.myproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    private Button showGuess;
 
     @Override
     // данный метод отвечает за основные настройки при создании activity
@@ -16,6 +20,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // отображает макет пользовательского интерфейса
         setContentView(R.layout.activity_main);
+
+        showGuess = findViewById(R.id.button_guess);
+        showGuess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // создает намерение и переход на новый activity
+                Intent intent = new Intent(MainActivity.this, ShowGuess.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
