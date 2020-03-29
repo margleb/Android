@@ -14,10 +14,10 @@
         android:text="@string/guess_the_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gues_field" />
+        app:layout_constraintTop_toBottomOf="@+id/guess_field" />
 
     <EditText
-        android:id="@+id/gues_field"
+        android:id="@+id/guess_field"
         android:layout_width="295dp"
         android:layout_height="45dp"
         android:layout_marginTop="104dp"

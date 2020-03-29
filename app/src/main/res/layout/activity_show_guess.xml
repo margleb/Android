@@ -10,7 +10,10 @@
         android:id="@+id/recieved_text_view"
         android:layout_width="193dp"
         android:layout_height="48dp"
-        android:layout_marginTop="332dp"
+        android:layout_marginTop="284dp"
+        android:text="Example"
+        android:textAlignment="center"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
