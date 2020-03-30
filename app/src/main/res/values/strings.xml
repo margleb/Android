@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MyProject</string>
+    <string name="title">Trivia</string>
+    <string name="true_text">true</string>
+    <string name="false_button">false</string>
+    <string name="previous_button">previous</string>
+    <string name="next_button">next</string>
+    <string name="counter_questions">0 out of 100</string>
 </resources>
