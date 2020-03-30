@@ -17,14 +17,16 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     // https://jsonplaceholder.typicode.com/todos/1
-    private RequestQueue requestQueue;
+    // private RequestQueue requestQueue;
+    RequestQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // создает очередь (пул) из запросов
-        requestQueue = Volley.newRequestQueue(this);
+        // requestQueue = Volley.newRequestQueue(this);
+        queue = MySingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
         // JSON запросы
         // method - HTTP метод для использования
@@ -67,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        queue.add(jsonArrayRequest);
+        // requestQueue.add(jsonArrayRequest);
         // requestQueue.add(jsonObjectRequest);
     }
 }
