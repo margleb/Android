@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myproject.data.AnswerListAsyncResponse;
 import com.example.myproject.data.QuestionBank;
@@ -49,15 +50,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         questionList = new QuestionBank().getQuestions(new AnswerListAsyncResponse() {
             @Override
             public void processFinished(ArrayList<Question> questionArrayList) {
+                questionCounterTextView.setText(currentQuestionIndex + " /" + questionArrayList.size());
                 questionTextView.setText(questionArrayList.get(currentQuestionIndex).getAnswer());
                 // Log.d("Inside", "processFinished: " + questionArrayList);
             }
         });
     }
 
+    private void checkAnswer(boolean userChooseCorrect) {
+        boolean answerIsTrue = questionList.get(currentQuestionIndex).isAnswerTrue();
+        int toastMessage = 0;
+        if(userChooseCorrect == answerIsTrue) {
+            toastMessage = R.string.correct_answer;
+        } else {
+            toastMessage= R.string.wrong_answer;
+        }
+        Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
+    }
+
     public void updateQuestion() {
        String question = questionList.get(currentQuestionIndex).getAnswer();
         questionTextView.setText(question);
+        questionCounterTextView.setText(currentQuestionIndex + " /" + questionList.size());
     }
 
     @Override
@@ -72,8 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 updateQuestion();
                 break;
             case R.id.true_button:
+                checkAnswer(true);
                 break;
             case R.id.false_button:
+                checkAnswer(false);
                 break;
         }
     }
