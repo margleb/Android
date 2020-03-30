@@ -1,4 +1,4 @@
-package com.example.myproject.conrtroller;
+package com.example.myproject.controller;
 
 import android.app.Application;
 import android.text.TextUtils;
@@ -14,12 +14,13 @@ public class AppController extends Application {
     private static AppController mInstance;
     private RequestQueue mRequestQueue;
 
-    public AppController getInstance() {
+    public static synchronized AppController getInstance() {
         // if(mInstance == null ) {
             // mInstance = new AppController();
         // }
         return mInstance;
     }
+
 
     @Override
     public void onCreate() {
