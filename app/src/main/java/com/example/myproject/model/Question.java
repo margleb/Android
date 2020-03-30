@@ -2,12 +2,12 @@ package com.example.myproject.model;
 
 public class Question {
     private String answer;
-    private String answerTrue;
+    private boolean answerTrue;
 
     public Question() {
     }
 
-    public Question(String answer, String answerTrue) {
+    public Question(String answer, boolean answerTrue) {
         this.answer = answer;
         this.answerTrue = answerTrue;
     }
@@ -20,11 +20,11 @@ public class Question {
         this.answer = answer;
     }
 
-    public String getAnswerTrue() {
+    public boolean getAnswerTrue() {
         return answerTrue;
     }
 
-    public void setAnswerTrue(String answerTrue) {
+    public void setAnswerTrue(boolean answerTrue) {
         this.answerTrue = answerTrue;
     }
 }
