@@ -24,6 +24,7 @@
             android:id="@+id/question_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="Hello there! This is where we going to add something..."
             android:textSize="18sp" />
     </androidx.cardview.widget.CardView>
