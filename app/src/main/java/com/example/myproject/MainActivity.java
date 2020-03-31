@@ -3,6 +3,7 @@ package com.example.myproject;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -102,7 +103,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shakeAnimation() {
         Animation shake = AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake_animation);
-        CardView cardView = findViewById(R.id.cardView);
+        final CardView cardView = findViewById(R.id.cardView);
         cardView.setAnimation(shake);
+
+        shake.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+               cardView.setBackgroundColor(Color.RED);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                cardView.setBackgroundColor(Color.WHITE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
     }
 }
