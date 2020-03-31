@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.myproject.data.AnswerListAsyncResponse;
 import com.example.myproject.data.QuestionBank;
 import com.example.myproject.model.Question;
+import com.example.myproject.model.Score;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView questionTextView;
     private TextView questionCounterTextView;
+    private TextView scoreTextView;
     private Button trueButton;
     private Button falseButton;
     private ImageButton nextButton;
@@ -32,11 +34,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int currentQuestionIndex = 0;
     private List<Question> questionList;
 
+    private int scoreCounter = 0;
+    private Score score;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        score = new Score(); // score
+        scoreTextView = findViewById(R.id.score_text);
         nextButton = findViewById(R.id.next_button);
         prevButton = findViewById(R.id.prev_button);
 
@@ -67,12 +74,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int toastMessage = 0;
         if(userChooseCorrect == answerIsTrue) {
             fadeView();
+            addPoints();
             toastMessage = R.string.correct_answer;
         } else {
             shakeAnimation();
+            deductPoints();
             toastMessage= R.string.wrong_answer;
         }
         Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    private void addPoints() {
+        scoreCounter += 100;
+        score.setScore(scoreCounter);
+        scoreTextView.setText(String.valueOf(score.getScore()));
+        Log.d("Score", "addPoints: " + score.getScore());
+    }
+
+    private void deductPoints() {
+        scoreCounter -= 100;
+        if(scoreCounter > 0) {
+            score.setScore(scoreCounter);
+            scoreTextView.setText(String.valueOf(score.getScore()));
+        } else {
+            scoreCounter = 0;
+            score.setScore(scoreCounter);
+            scoreTextView.setText(String.valueOf(score.getScore()));
+            Log.d("Score Bad", "deductPoints: " + score.getScore());
+        }
+        Log.d("Score", "addPoints: " + score.getScore());
     }
 
     public void updateQuestion() {
