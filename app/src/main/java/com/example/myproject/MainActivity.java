@@ -20,6 +20,7 @@ import com.example.myproject.data.QuestionBank;
 import com.example.myproject.model.Question;
 import com.example.myproject.model.Score;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,11 +54,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         questionCounterTextView = findViewById(R.id.counter_text);
         questionTextView = findViewById(R.id.question_textview);
 
-         nextButton.setOnClickListener(this);
-         prevButton.setOnClickListener(this);
+        nextButton.setOnClickListener(this);
+        prevButton.setOnClickListener(this);
 
-         trueButton.setOnClickListener(this);
-         falseButton.setOnClickListener(this);
+        trueButton.setOnClickListener(this);
+        falseButton.setOnClickListener(this);
+
+        scoreTextView.setText(MessageFormat.format("Score: {0}", String.valueOf(score.getScore())));
 
         questionList = new QuestionBank().getQuestions(new AnswerListAsyncResponse() {
             @Override
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void addPoints() {
         scoreCounter += 100;
         score.setScore(scoreCounter);
-        scoreTextView.setText(String.valueOf(score.getScore()));
+        scoreTextView.setText(MessageFormat.format("Score: {0}", String.valueOf(score.getScore())));
         Log.d("Score", "addPoints: " + score.getScore());
     }
 
@@ -95,11 +98,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scoreCounter -= 100;
         if(scoreCounter > 0) {
             score.setScore(scoreCounter);
-            scoreTextView.setText(String.valueOf(score.getScore()));
+            scoreTextView.setText(MessageFormat.format("Score: {0}", String.valueOf(score.getScore())));
         } else {
             scoreCounter = 0;
             score.setScore(scoreCounter);
-            scoreTextView.setText(String.valueOf(score.getScore()));
+            scoreTextView.setText(MessageFormat.format("Score: {0}", String.valueOf(score.getScore())));
             Log.d("Score Bad", "deductPoints: " + score.getScore());
         }
         Log.d("Score", "addPoints: " + score.getScore());
