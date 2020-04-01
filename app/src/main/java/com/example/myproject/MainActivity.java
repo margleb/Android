@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         score = new Score(); // score
         prefs = new Prefs(MainActivity.this);
 
-        // Log.d("Second", prefs.getHighScore() + "");
+        Log.d("Second",  "OnClick: " + prefs.getHighScore());
         scoreTextView = findViewById(R.id.score_text);
         nextButton = findViewById(R.id.next_button);
         prevButton = findViewById(R.id.prev_button);
@@ -190,6 +190,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
 
+    @Override
+    protected void onPause() {
+        // сохраняем последний счет
+        prefs.saveHighScore(score.getScore());
+        super.onPause();
     }
 }
