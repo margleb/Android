@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         falseButton.setOnClickListener(this);
 
         scoreTextView.setText(MessageFormat.format("Score: {0}", String.valueOf(score.getScore())));
+
+        // get previous state
+        currentQuestionIndex = prefs.getState();
+
         highestScoreTextView.setText(MessageFormat.format("Highest Score: {0}", String.valueOf(prefs.getHighScore())));
         questionList = new QuestionBank().getQuestions(new AnswerListAsyncResponse() {
             @Override
@@ -204,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onPause() {
         // сохраняем последний счет
         prefs.saveHighScore(score.getScore());
+        prefs.setState(currentQuestionIndex);
         super.onPause();
     }
 }
