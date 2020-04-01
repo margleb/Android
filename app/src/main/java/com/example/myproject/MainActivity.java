@@ -19,6 +19,7 @@ import com.example.myproject.data.AnswerListAsyncResponse;
 import com.example.myproject.data.QuestionBank;
 import com.example.myproject.model.Question;
 import com.example.myproject.model.Score;
+import com.example.myproject.util.Prefs;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int scoreCounter = 0;
     private Score score;
+    private Prefs prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         score = new Score(); // score
+        prefs = new Prefs(MainActivity.this);
+
+        // Log.d("Second", prefs.getHighScore() + "");
         scoreTextView = findViewById(R.id.score_text);
         nextButton = findViewById(R.id.next_button);
         prevButton = findViewById(R.id.prev_button);
@@ -118,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.next_button:
+                prefs.saveHighScore(scoreCounter);
+                // Log.d("Prefs", "onClick: " + prefs.getHighScore());
                 currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
                 updateQuestion();
                 break;
