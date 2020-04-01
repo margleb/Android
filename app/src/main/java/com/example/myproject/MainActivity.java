@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button falseButton;
     private ImageButton nextButton;
     private ImageButton prevButton;
+    private TextView highestScoreTextView;
     private int currentQuestionIndex = 0;
     private List<Question> questionList;
 
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         score = new Score(); // score
         prefs = new Prefs(MainActivity.this);
 
-        Log.d("Second",  "OnClick: " + prefs.getHighScore());
         scoreTextView = findViewById(R.id.score_text);
         nextButton = findViewById(R.id.next_button);
         prevButton = findViewById(R.id.prev_button);
@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         questionCounterTextView = findViewById(R.id.counter_text);
         questionTextView = findViewById(R.id.question_textview);
 
+        highestScoreTextView = findViewById(R.id.highest_score);
+
         nextButton.setOnClickListener(this);
         prevButton.setOnClickListener(this);
 
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         falseButton.setOnClickListener(this);
 
         scoreTextView.setText(MessageFormat.format("Score: {0}", String.valueOf(score.getScore())));
-
+        highestScoreTextView.setText(MessageFormat.format("Highest Score: {0}", String.valueOf(prefs.getHighScore())));
         questionList = new QuestionBank().getQuestions(new AnswerListAsyncResponse() {
             @Override
             public void processFinished(ArrayList<Question> questionArrayList) {
