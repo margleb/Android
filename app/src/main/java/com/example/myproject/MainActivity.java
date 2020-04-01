@@ -127,8 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.next_button:
                 prefs.saveHighScore(scoreCounter);
                 // Log.d("Prefs", "onClick: " + prefs.getHighScore());
-                currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
-                updateQuestion();
+                goNext();
                 break;
             case R.id.prev_button:
                 currentQuestionIndex = currentQuestionIndex != 0 ? currentQuestionIndex - 1 : questionList.size() - 1;
@@ -162,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onAnimationEnd(Animation animation) {
                 cardView.setBackgroundColor(Color.WHITE);
+                goNext();
             }
 
             @Override
@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onAnimationEnd(Animation animation) {
                 cardView.setBackgroundColor(Color.WHITE);
+                goNext();
             }
 
             @Override
@@ -192,6 +193,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
+
+    private void goNext() {
+        currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
+        updateQuestion();
     }
 
     @Override
