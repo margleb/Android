@@ -2,11 +2,13 @@ package com.example.myproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.example.myproject.data.DatabaseHandler;
 import com.example.myproject.model.Contact;
+import com.example.myproject.util.Util;
 
 import java.util.List;
 
@@ -17,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DatabaseHandler db = new DatabaseHandler(MainActivity.this);
+
+        Log.d("Count", "onCreate: " + db.getCount());
 
         Contact jeremy = new Contact();
         jeremy.setName("Jeremy");
@@ -45,4 +49,5 @@ public class MainActivity extends AppCompatActivity {
             Log.d("MainActivity", "onCreate: " + contact.getId());
         }
     }
+
 }
