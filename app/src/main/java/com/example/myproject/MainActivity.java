@@ -26,18 +26,23 @@ public class MainActivity extends AppCompatActivity {
         json.setName("Jason");
         json.setPhoneNumber("23213123");
 
+        db.addContact(json);
+
         // db.addContact(json);
 
         // Get 1 contact
-        Contact c = db.getContact(2);
-        c.setName("NewJeremy");
-        c.setPhoneNumber("2314");
-        int updatedRow = db.updateContact(c);
-        Log.d("RowId", "onCreate: " + updatedRow);
+        // Contact c = db.getContact(2);
+        // c.setName("NewJeremy");
+        // c.setPhoneNumber("2314");
+        // int updatedRow = db.updateContact(c);
+        // Log.d("RowId", "onCreate: " + updatedRow);
+
+        // delete a contact
+        // db.deleteContact(c);
 
         List<Contact> contactList = db.getAllContacts();
         for(Contact contact : contactList) {
-            Log.d("MainActivity", "onCreate: " + contact.getName());
+            Log.d("MainActivity", "onCreate: " + contact.getId());
         }
     }
 }
