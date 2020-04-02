@@ -4,10 +4,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.myproject.R;
 import com.example.myproject.model.Contact;
 import com.example.myproject.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -45,6 +49,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Util.KEY_PHONE_NUMBER, contact.getPhoneNumber());
         //Insert to row
         db.insert(Util.TABLE_NAME, null, values);
+        Log.d("DBHandler", "addContact: " + "item added");
         db.close(); // closing db connection!;
     }
     //Get a contact
@@ -63,6 +68,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contact.setPhoneNumber(cursor.getString(2));
 
         return contact;
+    }
+
+    // Get all Contacts
+    public List<Contact> getAllContacts() {
+        List<Contact> contactList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Select all contacts
+        String selectAll = "SELECT * FROM " + Util.TABLE_NAME;
+        Cursor cursor = db.rawQuery(selectAll, null);
+        // Loop through out data
+        if(cursor.moveToFirst()) {
+            do {
+                Contact contact = new Contact();
+                contact.setId(Integer.parseInt(cursor.getString(0)));
+                contact.setName(cursor.getString(1));
+                contact.setPhoneNumber(cursor.getString(2));
+                // add contact object to our list
+                contactList.add(contact);
+            } while(cursor.moveToNext());
+        }
+        return contactList;
     }
 
 }
