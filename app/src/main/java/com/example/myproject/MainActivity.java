@@ -40,22 +40,6 @@ public class MainActivity extends AppCompatActivity {
              Log.d("Contacts", contact.toString());
              contactArrayList.add(contact.getName());
          }
-         // create array adapter
-        arrayAdapter = new ArrayAdapter<>(
-                this,
-                 android.R.layout.simple_list_item_1,
-                 contactArrayList
-        );
 
-        // add to our listview
-        listView.setAdapter(arrayAdapter);
-
-        // Atttach eventlistener to listview
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("List", "onItemClick: " + contactArrayList.get(position));
-            }
-        });
     }
 }
