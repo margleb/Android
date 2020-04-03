@@ -1,6 +1,7 @@
 package com.example.myproject.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myproject.DetailsActivity;
 import com.example.myproject.R;
 import com.example.myproject.model.Contact;
 
@@ -70,12 +72,17 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             // получаем позицию
             int position = getAdapterPosition();
             Contact contact = contactList.get(position);
-            switch(v.getId()) {
-                case R.id.icon_button:
-                    Log.d("IconClicked", "onClick: " + contact.getPhoneNumber());
-                    break;
-            }
-            Log.d("Clicked", "onClick: " + contact.getName());
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("name", contact.getName());
+            intent.putExtra("phone", contact.getPhoneNumber());
+            context.startActivity(intent);
+            // switch(v.getId()) {
+                // case R.id.icon_button:
+                    // Log.d("IconClicked", "onClick: " + contact.getPhoneNumber());
+                    // break;
+            // }
+
+            // Log.d("Clicked", "onClick: " + contact.getName());
         }
     }
 }
