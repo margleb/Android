@@ -2,5 +2,4 @@
     <string name="app_name">MyProject</string>
     <string name="db_drop">DROP IF EXITST</string>
     <string name="name_goes_here">Name goes here</string>
-    <string name="name_goes_here">Name goes here</string>
 </resources>
