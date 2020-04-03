@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">MyProject</string>
+    <string name="app_name">Baby Needs</string>
+    <string name="action_settings">Settings</string>
 </resources>
