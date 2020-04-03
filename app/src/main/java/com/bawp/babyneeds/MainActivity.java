@@ -30,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
         // позволяет работать тулбару на более ранних версиях андройда
         setSupportActionBar(toolbar);
 
+       saveButton = findViewById(R.id.saveButton);
+       saveButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               saveItem();
+           }
+       });
        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
                 // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
+    }
+
+    public void saveItem() {
+      // Todo: save each baby item to db
+      // Todo: move to next screen - details screen
     }
 
     private void createPopupDialog() {
