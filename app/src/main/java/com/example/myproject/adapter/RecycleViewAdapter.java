@@ -1,8 +1,10 @@
 package com.example.myproject.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +16,10 @@ import java.util.List;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
 
-    private Contact context;
+    private Context context;
     private List<Contact> contactList;
 
-    public RecycleViewAdapter(Contact context, List<Contact> contactList) {
+    public RecycleViewAdapter(Context context, List<Contact> contactList) {
         this.context = context;
         this.contactList = contactList;
     }
@@ -30,18 +32,25 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        Contact contact = contactList.get(position); // each contact object inside of our list
+        viewHolder.contactName.setText(contact.getName());
+        viewHolder.phoneNumber.setText(contact.getPhoneNumber());
     }
-    
+
     @Override
     public int getItemCount() {
-        return 0;
+        return contactList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView contactName;
+        public TextView phoneNumber;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            contactName = itemView.findViewById(R.id.name);
+            phoneNumber = itemView.findViewById(R.id.phone_number);
         }
     }
 }
