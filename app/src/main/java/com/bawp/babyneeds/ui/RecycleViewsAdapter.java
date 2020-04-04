@@ -1,6 +1,7 @@
 package com.bawp.babyneeds.ui;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +36,9 @@ public class RecycleViewsAdapter extends RecyclerView.Adapter<RecycleViewsAdapte
     public void onBindViewHolder(@NonNull ViewHandler holder, int position) {
         Item item = itemList.get(position);
         holder.item_name.setText(item.getItemName());
-        holder.item_quantity.setText(item.getItemQuantity());
+        holder.item_quantity.setText(String.valueOf(item.getItemQuantity()));
         holder.item_color.setText(item.getItemColor());
-        holder.item_size.setText(item.getItemSize());
+        holder.item_size.setText(String.valueOf(item.getItemSize()));
         holder.dateAdedd.setText(item.getDateItemAdded());
     }
 
@@ -59,10 +60,10 @@ public class RecycleViewsAdapter extends RecyclerView.Adapter<RecycleViewsAdapte
         public ViewHandler(@NonNull View itemView, Context ctx) {
             super(itemView);
             context = ctx;
-            item_name = itemView.findViewById(R.id.babyItem);
+            item_name = itemView.findViewById(R.id.item_name);
+            item_quantity = itemView.findViewById(R.id.item_quantity);
             item_color = itemView.findViewById(R.id.item_color);
-            item_quantity = itemView.findViewById(R.id.itemQuantity);
-            item_color = itemView.findViewById(R.id.itemSize);
+            item_size = itemView.findViewById(R.id.item_size);
             dateAdedd = itemView.findViewById(R.id.item_date);
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);

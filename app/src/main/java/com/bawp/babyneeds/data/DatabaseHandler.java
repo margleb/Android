@@ -91,6 +91,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         Contstants.KEY_ID,
                         Contstants.KEY_BABY_ITEM,
                         Contstants.KEY_QTY_NUMBER,
+                        Contstants.KEY_COLOR,
                         Contstants.KEY_ITEM_SIZE,
                         Contstants.KEY_DATE_NAME},
                 null, null,null,null, Contstants.KEY_DATE_NAME + " DESC");
@@ -101,6 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 item.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Contstants.KEY_ID))));
                 item.setItemName(cursor.getString(cursor.getColumnIndex(Contstants.KEY_BABY_ITEM)));
                 item.setItemQuantity(cursor.getInt(cursor.getColumnIndex(Contstants.KEY_QTY_NUMBER)));
+                item.setItemColor(cursor.getString(cursor.getColumnIndex(Contstants.KEY_COLOR)));
                 item.setItemSize(cursor.getInt(cursor.getColumnIndex(Contstants.KEY_ITEM_SIZE)));
 
                 // convert Timestamp to something readeble

@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         // check if item was saved
         List<Item> items = databaseHandler.getAllItems();
         for(Item item : items) {
+            // databaseHandler.deleteItem(item.getId());
             Log.d("Main", "onCreate: " + item.getDateItemAdded());
         }
         
