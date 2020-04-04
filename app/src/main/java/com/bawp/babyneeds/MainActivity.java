@@ -1,7 +1,7 @@
 package com.bawp.babyneeds;
 
+import android.content.Intent;
 import android.os.Bundle;
-
 import com.bawp.babyneeds.data.DatabaseHandler;
 import com.bawp.babyneeds.model.Item;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,14 +9,13 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -70,7 +69,15 @@ public class MainActivity extends AppCompatActivity {
       databaseHandler.addItem(item);
       Snackbar.make(view, "Item Saved", Snackbar.LENGTH_SHORT).show();
 
-      // Todo: move to next screen - details screen
+      new Handler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            //code to be run
+            dialog.dismiss();
+            // Todo: move to next screen - details screen
+            startActivity(new Intent(MainActivity.this, ListActivity.class));
+          }
+      }, 1200); // 1 sec
     }
 
     private void createPopupDialog() {

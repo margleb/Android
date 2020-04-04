@@ -1,14 +1,14 @@
-package com.example.myproject;
+package com.bawp.babyneeds;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import com.bawp.babyneeds.R;
 
-public class MainActivity extends AppCompatActivity {
+import android.os.Bundle;
+
+public class ListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_list);
     }
 }
