@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText itemColor;
     private EditText itemSize;
     private DatabaseHandler databaseHandler;
+    private RecyclerView recyclerview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
+
+
     }
 
     public void saveItem(View view) {
