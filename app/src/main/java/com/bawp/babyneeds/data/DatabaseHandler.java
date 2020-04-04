@@ -62,6 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Contstants.KEY_ID,
                 Contstants.KEY_BABY_ITEM,
                 Contstants.KEY_QTY_NUMBER,
+                Contstants.KEY_COLOR,
                 Contstants.KEY_ITEM_SIZE,
                 Contstants.KEY_DATE_NAME},
                 Contstants.KEY_ID + "=?",

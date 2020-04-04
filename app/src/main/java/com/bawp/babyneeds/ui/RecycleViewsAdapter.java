@@ -35,11 +35,11 @@ public class RecycleViewsAdapter extends RecyclerView.Adapter<RecycleViewsAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHandler holder, int position) {
         Item item = itemList.get(position);
-        holder.item_name.setText(item.getItemName());
-        holder.item_quantity.setText(String.valueOf(item.getItemQuantity()));
-        holder.item_color.setText(item.getItemColor());
-        holder.item_size.setText(String.valueOf(item.getItemSize()));
-        holder.dateAdedd.setText(item.getDateItemAdded());
+        holder.item_name.setText(String.format("Item: %s", item.getItemName()));
+        holder.item_quantity.setText(String.format("Qty: %s", String.valueOf(item.getItemQuantity())));
+        holder.item_color.setText(String.format("Color: %s", item.getItemColor()));
+        holder.item_size.setText(String.format("Size: %s", String.valueOf(item.getItemSize())));
+        holder.dateAdedd.setText(String.format("Added on: %s", item.getDateItemAdded()));
     }
 
     @Override
