@@ -12,6 +12,11 @@ import androidx.annotation.Nullable;
 import com.bawp.babyneeds.model.Item;
 import com.bawp.babyneeds.util.Contstants;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private Context context;
@@ -74,9 +79,46 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             item.setItemQuantity(cursor.getInt(cursor.getColumnIndex(Contstants.KEY_QTY_NUMBER)));
             item.setItemSize(cursor.getInt(cursor.getColumnIndex(Contstants.KEY_ITEM_SIZE)));
             // convert Timestamp to something readeble
-            
+            DateFormat dateFormat = DateFormat.getDateInstance();
+            String formattedDate = dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndex(Contstants.KEY_DATE_NAME))).getTime()); // Feb 23, 2020
+            item.setDateItemAdded(formattedDate);
         }
-        return null;
+        return item;
     }
 
+    public List<Item> getAllItems() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Item> itemList = new ArrayList<>();
+        Cursor cursor = db.query(Contstants.TABLE_NAME,
+                new String[]{
+                        Contstants.KEY_ID,
+                        Contstants.KEY_BABY_ITEM,
+                        Contstants.KEY_QTY_NUMBER,
+                        Contstants.KEY_ITEM_SIZE,
+                        Contstants.KEY_DATE_NAME},
+                null, null,null,null, Contstants.KEY_DATE_NAME + "DESC");
+
+        if(cursor.moveToFirst()) {
+            do {
+                Item item = new Item();
+                item.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Contstants.KEY_ID))));
+                item.setItemName(cursor.getString(cursor.getColumnIndex(Contstants.KEY_BABY_ITEM)));
+                item.setItemQuantity(cursor.getInt(cursor.getColumnIndex(Contstants.KEY_QTY_NUMBER)));
+                item.setItemSize(cursor.getInt(cursor.getColumnIndex(Contstants.KEY_ITEM_SIZE)));
+
+                // convert Timestamp to something readeble
+                DateFormat dateFormat = DateFormat.getDateInstance();
+                String formattedDate = dateFormat.format(new Date(cursor.getLong(cursor.getColumnIndex(Contstants.KEY_DATE_NAME))).getTime()); // Feb 23, 2020
+                item.setDateItemAdded(formattedDate);
+
+                // Add to ArrayList
+                itemList.add(item);
+            } while (cursor.moveToNext());
+            return itemList;
+        }
+        // Todo: Add updateItem
+        // Todo: Add Delete Item
+        // Todo getItemCount
+        return null;
+    }
 }
