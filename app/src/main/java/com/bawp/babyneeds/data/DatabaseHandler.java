@@ -6,12 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import androidx.annotation.Nullable;
-
 import com.bawp.babyneeds.model.Item;
 import com.bawp.babyneeds.util.Contstants;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,11 +111,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 // Add to ArrayList
                 itemList.add(item);
             } while (cursor.moveToNext());
-            return itemList;
         }
-        // Todo: Add updateItem
-        // Todo: Add Delete Item
-        // Todo getItemCount
-        return null;
+        return itemList;
+    }
+
+    // Todo: Add updateItem
+    public int updateItem(Item item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Contstants.KEY_BABY_ITEM, item.getItemName());
+        values.put(Contstants.KEY_COLOR, item.getItemColor());
+        values.put(Contstants.KEY_QTY_NUMBER, item.getItemQuantity());
+        values.put(Contstants.KEY_ITEM_SIZE, item.getItemSize());
+        values.put(Contstants.KEY_DATE_NAME, java.lang.System.currentTimeMillis()); // timestamp in milliseconds
+        // update row
+        return db.update(Contstants.TABLE_NAME, values, Contstants.KEY_ID + "=?", new String[]{String.valueOf(item.getId())});
+    }
+    // Todo: Add Delete Item
+    public void deleteItem(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(Contstants.TABLE_NAME, Contstants.KEY_ID + "=?", new String[]{String.valueOf(id)});
+        //close
+        db.close();
+    }
+    // Todo getItemCount
+    public int getItemsCount() {
+        String countQuery = "SELECT * FROM " + Contstants.TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        return cursor.getCount();
     }
 }
