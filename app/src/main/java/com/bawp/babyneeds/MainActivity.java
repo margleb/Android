@@ -1,17 +1,23 @@
 package com.bawp.babyneeds;
 
 import android.os.Bundle;
+
+import com.bawp.babyneeds.data.DatabaseHandler;
+import com.bawp.babyneeds.model.Item;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
@@ -21,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText itemQuantity;
     private EditText itemColor;
     private EditText itemSize;
+    private DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
         // позволяет работать тулбару на более ранних версиях андройда
         setSupportActionBar(toolbar);
 
+        databaseHandler = new DatabaseHandler(this);
+
+        // check if item was saved
+        List<Item> items = databaseHandler.getAllItems();
+        for(Item item : items) {
+            Log.d("Main", "onCreate: " + item.getDateItemAdded());
+        }
+        
        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,8 +55,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void saveItem() {
+    public void saveItem(View view) {
       // Todo: save each baby item to db
+      Item item = new Item();
+      String newItem = babyItem.getText().toString().trim();
+      String newColor = itemColor.getText().toString().trim();
+      int quantity = Integer.parseInt(itemQuantity.getText().toString().trim());
+      int size = Integer.parseInt(itemSize.getText().toString().trim());
+      item.setItemName(newItem);
+      item.setItemColor(newColor);
+      item.setItemQuantity(quantity);
+      item.setItemSize(size);
+
+      databaseHandler.addItem(item);
+      Snackbar.make(view, "Item Saved", Snackbar.LENGTH_SHORT).show();
+
       // Todo: move to next screen - details screen
     }
 
@@ -56,7 +84,15 @@ public class MainActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveItem();
+                // view передается для Snackbar
+                if(!babyItem.getText().toString().isEmpty()
+                && !itemColor.getText().toString().isEmpty()
+                && !itemQuantity.getText().toString().isEmpty()
+                && !itemSize.getText().toString().isEmpty()) {
+                    saveItem(v);
+                } else {
+                    Snackbar.make(v, "Empty Fields not Allowed!", Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
         builder.setView(view);

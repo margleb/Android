@@ -93,7 +93,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         Contstants.KEY_QTY_NUMBER,
                         Contstants.KEY_ITEM_SIZE,
                         Contstants.KEY_DATE_NAME},
-                null, null,null,null, Contstants.KEY_DATE_NAME + "DESC");
+                null, null,null,null, Contstants.KEY_DATE_NAME + " DESC");
 
         if(cursor.moveToFirst()) {
             do {
