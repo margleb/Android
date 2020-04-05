@@ -21,11 +21,11 @@ public class NoDoRepoisitory {
         allNoDos = noDoDao.getAllNoDos();
     }
 
-    LiveData<List<NoDo>> getAllNoDos() {
+    public LiveData<List<NoDo>> getAllNoDos() {
         return allNoDos;
     }
 
-    void insert(NoDo noDo) {
+    public void insert(NoDo noDo) {
         new insertAsyncTask(noDoDao).execute(noDo);
     }
 
