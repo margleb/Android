@@ -2,4 +2,6 @@
     <string name="app_name">NoDo</string>
     <string name="action_settings">Settings</string>
     <string name="no_notodo">No no todo!</string>
+    <string name="hint_nodo">Enter a no do</string>
+    <string name="save_text">Save text</string>
 </resources>
