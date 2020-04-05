@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -83,6 +85,8 @@ public class RecycleViewsAdapter extends RecyclerView.Adapter<RecycleViewsAdapte
             switch (v.getId()) {
                 case R.id.editButton:
                     // edit item
+                    editItem();
+                    // Toast.makeText(context, "work!", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.deleteButton:
                     // delete button
@@ -92,6 +96,43 @@ public class RecycleViewsAdapter extends RecyclerView.Adapter<RecycleViewsAdapte
                     deleteItem(item.getId());
                     break;
             }
+        }
+
+        private void editItem() {
+
+            builder = new AlertDialog.Builder(context);
+            inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.popup, null);
+
+            TextView title = view.findViewById(R.id.title);
+            EditText babyItem = view.findViewById(R.id.babyItem);
+            EditText itemQuantity = view.findViewById(R.id.itemQuantity);
+            EditText itemColor = view.findViewById(R.id.itemColor);
+            EditText itemSize = view.findViewById(R.id.itemSize);
+            Button saveButton = view.findViewById(R.id.saveButton);
+            saveButton.setText(R.string.update_text);
+
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // update our click
+                    DatabaseHandler databaseHandler = new DatabaseHandler(context);
+                    // update items
+
+                }
+            });
+
+            Item item = itemList.get(getAdapterPosition());
+
+            title.setText(R.string.edit_item);
+            babyItem.setText(item.getItemName());
+            itemQuantity.setText(String.valueOf(item.getItemQuantity()));
+            itemColor.setText(item.getItemColor());
+            itemSize.setText(String.valueOf(item.getItemSize()));
+
+            builder.setView(view);
+            dialog = builder.create();
+            dialog.show();
         }
 
         private void deleteItem(final int id) {
