@@ -1,5 +1,6 @@
 package com.bawp.babyneeds.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,9 @@ import java.util.List;
 public class RecycleViewsAdapter extends RecyclerView.Adapter<RecycleViewsAdapter.ViewHandler> {
     private List<Item> itemList;
     private Context context;
+    private AlertDialog.Builder builder;
+    private AlertDialog dialog;
+    private LayoutInflater inflater;
 
     public RecycleViewsAdapter(Context context, List<Item> itemList) {
         this.context = context;
@@ -90,12 +94,37 @@ public class RecycleViewsAdapter extends RecyclerView.Adapter<RecycleViewsAdapte
             }
         }
 
-        private void deleteItem(int id) {
-            DatabaseHandler db = new DatabaseHandler(context);
-            db.deleteItem(id);
-            // удалает карточку из интерфейса
-            itemList.remove(getAdapterPosition());
-            notifyItemRemoved(getAdapterPosition());
+        private void deleteItem(final int id) {
+            builder = new AlertDialog.Builder(context);
+            inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.confirmation_pop, null);
+
+            Button noButton = view.findViewById(R.id.conf_no_button);
+            Button yesButton = view.findViewById(R.id.conf_yes_button);
+
+            builder.setView(view);
+            dialog = builder.create();
+            dialog.show();
+
+            noButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            yesButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseHandler db = new DatabaseHandler(context);
+                    db.deleteItem(id);
+                    // удалает карточку из интерфейса
+                    itemList.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
+                    dialog.dismiss();
+                }
+            });
+
         }
     }
 
