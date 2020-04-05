@@ -1,5 +1,6 @@
 package com.bawp.nodo.data;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -24,5 +25,5 @@ public interface NoDoDao {
     int updateNoDoItem(int id, String nodoText);
 
     @Query("SELECT * FROM nodo_table ORDER BY nodo_col DESC")
-    List<NoDo> getAllNoDos();
+    LiveData<List<NoDo>> getAllNoDos();
 }
