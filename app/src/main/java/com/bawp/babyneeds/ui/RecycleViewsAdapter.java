@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bawp.babyneeds.R;
 import com.bawp.babyneeds.data.DatabaseHandler;
 import com.bawp.babyneeds.model.Item;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -82,53 +83,61 @@ public class RecycleViewsAdapter extends RecyclerView.Adapter<RecycleViewsAdapte
         public void onClick(View v) {
             // получаем id текущего обьекта
             int position = getAdapterPosition();
+            Item item = itemList.get(position);
             switch (v.getId()) {
                 case R.id.editButton:
                     // edit item
-                    editItem();
-                    // Toast.makeText(context, "work!", Toast.LENGTH_SHORT).show();
+                    editItem(item);
                     break;
                 case R.id.deleteButton:
                     // delete button
-                    // обьявляется дополнительно для избегания возможных ппроблем изменения позиции
-                    position = getAdapterPosition();
-                    Item item = itemList.get(position);
                     deleteItem(item.getId());
                     break;
             }
         }
 
-        private void editItem() {
+        private void editItem(final Item newItem) {
 
             builder = new AlertDialog.Builder(context);
             inflater = LayoutInflater.from(context);
             View view = inflater.inflate(R.layout.popup, null);
 
             TextView title = view.findViewById(R.id.title);
-            EditText babyItem = view.findViewById(R.id.babyItem);
-            EditText itemQuantity = view.findViewById(R.id.itemQuantity);
-            EditText itemColor = view.findViewById(R.id.itemColor);
-            EditText itemSize = view.findViewById(R.id.itemSize);
+            final EditText babyItem = view.findViewById(R.id.babyItem);
+            final EditText itemQuantity = view.findViewById(R.id.itemQuantity);
+            final EditText itemColor = view.findViewById(R.id.itemColor);
+            final EditText itemSize = view.findViewById(R.id.itemSize);
             Button saveButton = view.findViewById(R.id.saveButton);
             saveButton.setText(R.string.update_text);
 
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
                     // update our click
                     DatabaseHandler databaseHandler = new DatabaseHandler(context);
                     // update items
-
+                    newItem.setItemName(babyItem.getText().toString());
+                    newItem.setItemColor(itemColor.getText().toString());
+                    newItem.setItemQuantity(Integer.parseInt(itemQuantity.getText().toString()));
+                    newItem.setItemSize(Integer.parseInt(itemSize.getText().toString()));
+                    if(!babyItem.getText().toString().isEmpty()
+                    && !itemColor.getText().toString().isEmpty()
+                    && !itemQuantity.getText().toString().isEmpty()
+                    && !itemSize.getText().toString().isEmpty()) {
+                        databaseHandler.updateItem(newItem);
+                        notifyItemChanged(getAdapterPosition(), newItem); // позволяет обновить без перезагрузки приложения
+                    } else {
+                        Snackbar.make(view, "Fields Empty", Snackbar.LENGTH_SHORT).show();
+                    }
+                    dialog.dismiss();
                 }
             });
 
-            Item item = itemList.get(getAdapterPosition());
-
             title.setText(R.string.edit_item);
-            babyItem.setText(item.getItemName());
-            itemQuantity.setText(String.valueOf(item.getItemQuantity()));
-            itemColor.setText(item.getItemColor());
-            itemSize.setText(String.valueOf(item.getItemSize()));
+            babyItem.setText(newItem.getItemName());
+            itemQuantity.setText(String.valueOf(newItem.getItemQuantity()));
+            itemColor.setText(newItem.getItemColor());
+            itemSize.setText(String.valueOf(newItem.getItemSize()));
 
             builder.setView(view);
             dialog = builder.create();
