@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "nod_table")
+@Entity(tableName = "nodo_table")
 public class NoDo {
     @PrimaryKey(autoGenerate = true)
     private int id;
