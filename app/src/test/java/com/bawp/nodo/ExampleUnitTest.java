@@ -1,4 +1,4 @@
-package com.example.myproject;
+package com.bawp.nodo;
 
 import org.junit.Test;
 
