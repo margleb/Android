@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bawp.babyneeds.R;
+import com.bawp.babyneeds.data.DatabaseHandler;
 import com.bawp.babyneeds.model.Item;
 
 import java.util.List;
@@ -73,14 +74,28 @@ public class RecycleViewsAdapter extends RecyclerView.Adapter<RecycleViewsAdapte
 
         @Override
         public void onClick(View v) {
+            // получаем id текущего обьекта
+            int position = getAdapterPosition();
             switch (v.getId()) {
                 case R.id.editButton:
                     // edit item
                     break;
                 case R.id.deleteButton:
                     // delete button
+                    // обьявляется дополнительно для избегания возможных ппроблем изменения позиции
+                    position = getAdapterPosition();
+                    Item item = itemList.get(position);
+                    deleteItem(item.getId());
                     break;
             }
+        }
+
+        private void deleteItem(int id) {
+            DatabaseHandler db = new DatabaseHandler(context);
+            db.deleteItem(id);
+            // удалает карточку из интерфейса
+            itemList.remove(getAdapterPosition());
+            notifyItemRemoved(getAdapterPosition());
         }
     }
 

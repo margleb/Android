@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
         databaseHandler = new DatabaseHandler(this);
 
+        byPassActivity();
+
         // check if item was saved
         List<Item> items = databaseHandler.getAllItems();
         for(Item item : items) {
@@ -57,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void byPassActivity() {
+        if(databaseHandler.getItemsCount() > 0) {
+            startActivity(new Intent(MainActivity.this, ListActivity.class));
+            finish();
+        }
     }
 
     public void saveItem(View view) {
