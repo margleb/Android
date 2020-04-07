@@ -1,5 +1,6 @@
 package com.bawp.nodo.ui;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class NoDoListAdapter extends RecyclerView.Adapter<NoDoListAdapter.NoDoVi
         }
     }
 
-    void setNoDo(List<NoDo> noDos) {
+    public void setNoDos(List<NoDo> noDos) {
         noDoList = noDos;
         notifyDataSetChanged();
     }

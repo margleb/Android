@@ -4,4 +4,5 @@
     <string name="no_notodo">No no todo!</string>
     <string name="hint_nodo">Enter a no do</string>
     <string name="save_text">Save text</string>
+    <string name="empty_not_saved">Not Saved</string>
 </resources>

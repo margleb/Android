@@ -51,13 +51,12 @@ public abstract class NoDoRoomDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            noDoDao.deleteAll(); // removes all itemds from our tables
+            // noDoDao.deleteAll(); // removes all itemds from our tables
             // for testing
-            NoDo noDo = new NoDo("Buy an new Ferriari");
-            noDoDao.insert(noDo);
-
-            noDo = new NoDo("Buy Big house");
-            noDoDao.insert(noDo);
+            // NoDo noDo = new NoDo("Buy an new Ferriari");
+            // noDoDao.insert(noDo);
+            // noDo = new NoDo("Buy Big house");
+            //noDoDao.insert(noDo);
 
             return null;
         }

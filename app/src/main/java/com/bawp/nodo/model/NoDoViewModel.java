@@ -18,7 +18,7 @@ public class NoDoViewModel extends AndroidViewModel {
         noDoRepoisitory = new NoDoRepoisitory(application);
         allNoDos = noDoRepoisitory.getAllNoDos();
     }
-    LiveData<List<NoDo>> getAllNoDos() {
+    public LiveData<List<NoDo>> getAllNoDos() {
         return allNoDos;
     }
     public void insert(NoDo noDo) {
