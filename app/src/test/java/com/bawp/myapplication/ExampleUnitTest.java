@@ -1,4 +1,4 @@
-package com.bawp.testlocation;
+package com.bawp.myapplication;
 
 import org.junit.Test;
 
