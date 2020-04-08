@@ -71,6 +71,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         permissionsToRequest = permissionsToRequest(permissions);
 
+        // запрос разрешений
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(permissionsToRequest.size() > 0) {
+                requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+            }
+        }
+
         client = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
                 // добавляет слушатель события регистрации и сбоя подключения к клиенту
                 .addOnConnectionFailedListener(this)
@@ -185,7 +192,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onLocationChanged(Location location) {
-
+        if(location != null) {
+            locationTextView.setText(MessageFormat.format("Lat: {0} Lon: {1}", location.getLatitude(), location.getLongitude()));
+        }
     }
 
     @Override
@@ -207,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnected(@Nullable Bundle bundle) {
         // проверка на включение разрешений
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         // вызов слушателя при успешном завершении задачи
