@@ -1,6 +1,7 @@
 package com.bawp.testlocation;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -13,8 +14,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,6 +39,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+    private static final int ALL_PERMISSIONS_RESULT = 1111;
     // позволяет управлять сервисами Google Play, управляя запросами
     private GoogleApiClient client;
     // обьеденный провайдер местоположения, для получения последнего известного местоположения устройства
@@ -226,12 +230,67 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(UPDATE_INTERVAL); // интервал запросов на обновление
         locationRequest.setFastestInterval(FASTEST_INTERVAL); // устанавливает наиболее быстрый интервал
-
+        // проверка на разрешение
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
         && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(MainActivity.this, "You need to enable pemissions to display location!", Toast.LENGTH_LONG).show();
         }
 
+        LocationServices.getFusedLocationProviderClient(MainActivity.this).requestLocationUpdates(locationRequest, new LocationCallback() {
+            @Override
+            // изменение локали
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                if(locationResult != null) {
+                    Location location = locationResult.getLastLocation();
+                    locationTextView.setText(MessageFormat.format("Lat: {0} Lon: {1}", location.getLatitude(), location.getLongitude()));
+                }
+            }
+            @Override
+            public void onLocationAvailability(LocationAvailability locationAvailability) {
+                super.onLocationAvailability(locationAvailability);
+            }
+        }, null);
+    }
+
+    @Override
+    // здесь отслеживается ответ на предоставление разрешения пользователю
+    public void onRequestPermissionsResult(int requestCode, @NonNull final String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch(requestCode) {
+            case ALL_PERMISSIONS_RESULT:
+                for(String perm : permissionsToRequest) {
+                    // добавляем, если разрешение было отклонено
+                    if(!hasPermission(perm)) {
+                        permissionsRejected.add(perm);
+                    }
+                }
+            if(permissionsRejected.size() > 0) {
+                // проверка весии сборки
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    // позволяет создать интерфейс для отображения дополнительного контеста для пользователя
+                    // в случае если он отказал в предоставлении разрешения
+                    if(shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
+                        // создаем диалоговое окно
+                        new AlertDialog.Builder(MainActivity.this).setMessage("These permissions are mandatory to get location").
+                                setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            // запрашивает коллекцию разрешений которые будут предоставлены данной учетной записи
+                                            requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
+                                        }
+                                    }
+                                }).setNegativeButton("Сancel", null).create().show();
+                    };
+                }
+            } else {
+                if(client != null) {
+                    client.connect();
+                }
+            }
+        break;
+        }
     }
 
     @Override
