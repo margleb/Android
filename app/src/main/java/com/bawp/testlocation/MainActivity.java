@@ -1,6 +1,11 @@
 package com.bawp.testlocation;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,5 +54,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    // проверяеем работу Google Play
+    protected void onPostResume() {
+        super.onPostResume();
+        // проверка, доступен ли нам Google плей
+        int errorCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+        // если Google Плей не доступен
+        if(errorCode != ConnectionResult.SUCCESS) {
+            Dialog errorDialog = GoogleApiAvailability.getInstance().getErrorDialog(this, errorCode, errorCode, new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    Toast.makeText(MainActivity.this,"No servieces", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+            errorDialog.show();
+        } else {
+            Toast.makeText(MainActivity.this,"All is good!", Toast.LENGTH_LONG).show();
+        }
     }
 }
