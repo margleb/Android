@@ -1,13 +1,24 @@
 package com.bawp.testlocation;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
@@ -15,7 +26,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+    // позволяет управлять сервисами Google Play, управляя запросами
+    private GoogleApiClient client;
+    // обьеденный провайдер местоположения, для получения последнего известного местоположения устройства
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    // создаем массив разрешений на запрос, для того чтобы убедится что пользователь имеет разрешение на данный запрос
+    private ArrayList<String> permissionsToRequest;
+    // разрешения в доступе
+    private ArrayList<String> permissions = new ArrayList<>();
+    // отказы в доступе
+    private ArrayList<String> permissionsRejected = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +46,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        // получает последнее известное положение устройства
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
+
+        // добавляем необходимые разрешения, необходимые для запроса местоположения пользователя
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION); // позволяет определять местоположение с максимально возможной точностью, учитывает GPS и WIFI
+        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION); // приблизительная точность, основанная на определении по wifi.
+
+        permissionsToRequest = permissionsToRequest(permissions);
+
+        client = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
+                // добавляет слушатель события регистрации и сбоя подключения к клиенту
+                .addOnConnectionFailedListener(this)
+                // прослушивает все переопределенные методы
+                .addConnectionCallbacks(this)
+                .build();
 
        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -32,6 +70,28 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+    }
+
+    private ArrayList<String> permissionsToRequest(ArrayList<String> wantendPermissions) {
+        ArrayList<String> result = new ArrayList<>();
+        // проверяем, было ли разрешение уже запрошено и принято
+        for(String perm : wantendPermissions) {
+            if(!hasPermission(perm)) {
+                result.add(perm); // если пользователь дал разрешение
+            }
+        }
+
+    }
+
+    private boolean hasPermission(String perm) {
+        // Ecли версия SDK выше либо равна версии marshmellow
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // возращает true/false если данному пакет было предоставлено разрешение
+            // checkSelfPermission() - определяет было ли предоставлено данному пакету разрешение
+            return checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED;
+        }
+        return true;
     }
 
     @Override
@@ -75,5 +135,40 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(MainActivity.this,"All is good!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
