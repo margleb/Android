@@ -13,7 +13,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -21,11 +24,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -39,6 +46,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private ArrayList<String> permissions = new ArrayList<>();
     // отказы в доступе
     private ArrayList<String> permissionsRejected = new ArrayList<>();
+    private TextView locationTextView;
+    private LocationRequest locationRequest;
+    public static final long UPDATE_INTERVAL = 5000;
+    public static final long FASTEST_INTERVAL = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setSupportActionBar(toolbar);
         // получает последнее известное положение устройства
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
+        locationTextView = findViewById(R.id.location_text_view);
 
         // добавляем необходимые разрешения, необходимые для запроса местоположения пользователя
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION); // позволяет определять местоположение с максимально возможной точностью, учитывает GPS и WIFI
@@ -72,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
     }
-
+    // создает список разрешений запрашиваемых пользователем
     private ArrayList<String> permissionsToRequest(ArrayList<String> wantendPermissions) {
         ArrayList<String> result = new ArrayList<>();
         // проверяем, было ли разрешение уже запрошено и принято
@@ -81,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 result.add(perm); // если пользователь дал разрешение
             }
         }
-
+        return result;
     }
 
     private boolean hasPermission(String perm) {
@@ -117,9 +129,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if(client != null) {
+            client.connect(); // соединяется с сервисом GooglePlay
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(client != null) {
+            client.disconnect(); // отсоединяется от сервиса GooglePlay
+        }
+    }
+
+
+    @Override
     // проверяеем работу Google Play
     protected void onPostResume() {
         super.onPostResume();
+        checkPlayServices();
+    }
+
+    public void checkPlayServices() {
         // проверка, доступен ли нам Google плей
         int errorCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         // если Google Плей не доступен
@@ -134,6 +166,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             errorDialog.show();
         } else {
             Toast.makeText(MainActivity.this,"All is good!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(client != null && client.isConnected()) {
+            // чтобы остановить обновления местоположения, вызовите removeLocationUpdates(), передав ему LocationCallback
+            LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(new LocationCallback() {});
+            client.disconnect();
         }
     }
 
@@ -159,6 +201,36 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        // проверка на включение разрешений
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        // вызов слушателя при успешном завершении задачи
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                // Получаем последнее местоположение, однако оном может быть равнo null
+                if(location != null) {
+                    locationTextView.setText(MessageFormat.format("Lat: {0} Lon: {1}", location.getLatitude(), location.getLongitude()));
+                }
+            }
+        });
+        // обновление расположения в случае его изменения
+        startLocationUpdates();
+    }
+
+    private void startLocationUpdates() {
+        locationRequest = new LocationRequest();
+        // обеспечивает максимально точное местоположение
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(UPDATE_INTERVAL); // интервал запросов на обновление
+        locationRequest.setFastestInterval(FASTEST_INTERVAL); // устанавливает наиболее быстрый интервал
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(MainActivity.this, "You need to enable pemissions to display location!", Toast.LENGTH_LONG).show();
+        }
 
     }
 
