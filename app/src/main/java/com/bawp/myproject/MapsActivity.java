@@ -14,6 +14,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.bawp.myproject.UI.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,11 +28,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     LocationListener locationListener;
     LocationManager locationManager;
+    private RequestQueue queue;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +46,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        queue = Volley.newRequestQueue(this);
+        getEarthQuakes();
+    }
+
+    private void getEarthQuakes() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constants.URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray featues = response.getJSONArray("features");
+                    for(int i = 0; i < Constants.LIMIT; i++) {
+                        JSONObject properties = featues.getJSONObject(i).getJSONObject("properties");
+                        // Log.d("Properties:", properties.getString("place"));
+                        // Get geometry object
+                        JSONObject geometry = featues.getJSONObject(i).getJSONObject("geometry");
+                        // get coordinates array
+                        JSONArray coordinates = geometry.getJSONArray("coordinates");
+                        double lon = coordinates.getDouble(0);
+                        double lat = coordinates.getDouble(1);
+                        Log.d("Quake",lon + ", " + lat);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Quake","error!");
+            }
+        });
+        queue.add(jsonObjectRequest);
     }
 
     /**
