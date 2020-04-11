@@ -9,6 +9,8 @@ public class EarthQuake {
     private double lat;
     private double lon;
 
+    public EarthQuake() { }
+
     public EarthQuake(String place, double magnitude, long time, String detailLink, String type, double lat, double lon) {
         this.place = place;
         this.magnitude = magnitude;

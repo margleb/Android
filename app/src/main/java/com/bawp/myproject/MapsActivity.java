@@ -20,17 +20,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bawp.myproject.Model.EarthQuake;
 import com.bawp.myproject.UI.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Date;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -51,6 +56,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void getEarthQuakes() {
+        final EarthQuake earthQuake = new EarthQuake();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constants.URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -65,7 +71,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         JSONArray coordinates = geometry.getJSONArray("coordinates");
                         double lon = coordinates.getDouble(0);
                         double lat = coordinates.getDouble(1);
-                        Log.d("Quake",lon + ", " + lat);
+                        // Log.d("Quake",lon + ", " + lat);
+                        earthQuake.setPlace(properties.getString("place"));
+                        earthQuake.setType(properties.getString("type"));
+                        earthQuake.setTime(properties.getLong("time"));
+                        earthQuake.setMagnitude(properties.getDouble("mag"));
+                        earthQuake.setDetailLink(properties.getString("detail"));
+                        java.text.DateFormat dateFormat = java.text.DateFormat.getInstance();
+
+                        String formattedDate = dateFormat.format(new Date(Long.valueOf(properties.getLong("time"))).getTime());
+                        // добавляем маркеры
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                        markerOptions.title(earthQuake.getPlace());
+                        markerOptions.position(new LatLng(lat, lon));
+                        markerOptions.snippet("Magnitude: " + earthQuake.getMagnitude() + "\n" + "Date: " + formattedDate);
+
+                        Marker marker = mMap.addMarker(markerOptions);
+                        marker.setTag(earthQuake.getDetailLink());
+
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 1));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -128,9 +153,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // LatLng sydney = new LatLng(-34, 151);
+        // mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        // mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override
