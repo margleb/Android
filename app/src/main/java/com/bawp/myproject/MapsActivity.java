@@ -204,7 +204,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         JSONObject geoJsonObj = contentObj.getJSONObject("geoserve.json");
                         detailsUrl = geoJsonObj.getString("url");
                     }
-                    Log.d("URL", detailsUrl);
+                    // Log.d("URL", detailsUrl);
+                    getMoreDitails(detailsUrl);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -228,7 +229,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Button dissmissButtonTop = (Button) view.findViewById(R.id.desmissPopTop);
                 TextView popList = (TextView) view.findViewById(R.id.popList);
                 WebView htmlPop = (WebView) view.findViewById(R.id.htmlWebview);
-                
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                try {
+                    if(response.has("tectonicSummary") && response.getString("tectonicSummary") != null) {
+                        JSONObject tectonic = response.getJSONObject("tectonicSummary");
+                        if(tectonic.has("text") && tectonic.getString("text") != null) {
+                            String text = tectonic.getString("text");
+                            htmlPop.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
+                            Log.d("HTML", text);
+                        }
+                    }
+                    JSONArray cities = response.getJSONArray("cities");
+                    for(int i = 0; i < cities.length(); i++) {
+                        JSONObject citiesObj = cities.getJSONObject(i);
+                        stringBuilder.append(
+                                "City: " + citiesObj.getString("name") + "\n" +
+                                "Distance: " + citiesObj.getString("distance") + "\n" +
+                                "Pubpualation: " +  citiesObj.getString("population"));
+                        stringBuilder.append("\n\n");
+                    }
+                    popList.setText(stringBuilder);
+                    // предоставляется 2 варианта закрытия окна
+                    dissmissButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dissmissButtonTop.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialogBuilder.setView(view);
+                    dialog = dialogBuilder.create();
+                    dialog.show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
         }, new Response.ErrorListener() {
             @Override
