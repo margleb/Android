@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private Button playing_button;
     private MediaPlayer mediaPlayer;
+    private SeekBar seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         mediaPlayer = new MediaPlayer();
         playing_button = findViewById(R.id.play_button);
+        seekBar = findViewById(R.id.seekBar);
 
         try {
             mediaPlayer.setDataSource("https://buildappswithpaulo.com/music/watch_me.mp3");
@@ -28,9 +32,38 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                int duraction = mp.getDuration();
+                Toast.makeText(MainActivity.this, String.valueOf((duraction/1000)/60), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser) {
+                    mediaPlayer.seekTo(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         MediaPlayer.OnPreparedListener onPrepared = new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(final MediaPlayer mp) {
+                seekBar.setMax(mp.getDuration());
                 // mp.start();
                 playing_button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -52,8 +85,11 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer.prepareAsync();
         // mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.example);
 
-
     }
+
+
+
+
 
 //    public void startPlaying() {
 //        if(mediaPlayer != null) {
