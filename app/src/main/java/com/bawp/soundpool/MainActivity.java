@@ -6,20 +6,25 @@ import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
-    private Button button_one, button_two, button_three, button_four;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private Button buttonOne, buttonTwo, buttonThree;
     private SoundPool soundPool;
+    private int sound1, sound2, sound3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button_one = findViewById(R.id.button_one);
-        button_two = findViewById(R.id.button_two);
-        button_three = findViewById(R.id.button_three);
-        button_four = findViewById(R.id.button_four);
+        buttonOne = findViewById(R.id.button_one);
+        buttonTwo = findViewById(R.id.button_two);
+        buttonThree = findViewById(R.id.button_three);
+
+        buttonOne.setOnClickListener(this);
+        buttonTwo.setOnClickListener(this);
+        buttonThree.setOnClickListener(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -34,6 +39,35 @@ public class MainActivity extends AppCompatActivity {
                     .setMaxStreams(4)
                     .setAudioAttributes(audioAttributes)
                     .build();
+
+            sound1 = soundPool.load(MainActivity.this, R.raw.click_one, 1);
+            sound2 = soundPool.load(MainActivity.this, R.raw.click_two, 1);
+            sound3 = soundPool.load(MainActivity.this, R.raw.click_three, 1);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_one:
+                soundPool.play(sound1, 1,1,1,0,1);
+                break;
+            case R.id.button_two:
+                soundPool.play(sound2, 1,1,1,0,1);
+                break;
+            case R.id.button_three:
+                soundPool.play(sound3, 1,1,1,0,1);
+                break;
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(soundPool != null) {
+            soundPool.release();
+            soundPool = null;
         }
     }
 }
