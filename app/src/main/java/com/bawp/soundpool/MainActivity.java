@@ -2,79 +2,36 @@ package com.bawp.soundpool;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SurfaceHolder.Callback {
-    Button play, pause, skip;
-    MediaPlayer mediaPlayer;
-    SurfaceView surfaceView;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
+public class MainActivity extends AppCompatActivity {
+    private PlayerView playerView;
+    private SimpleExoPlayer player;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mediaPlayer = mediaPlayer.create(MainActivity.this, R.raw.video);
-
-        surfaceView = findViewById(R.id.surface);
-        surfaceView.setKeepScreenOn(true);
-
-        SurfaceHolder holder = surfaceView.getHolder();
-        holder.setFixedSize(400, 300);
-        holder.addCallback(this);
-
-        play = findViewById(R.id.button_blay);
-        pause = findViewById(R.id.button_pause);
-        skip = findViewById(R.id.button_skip);
-
-        play.setOnClickListener(this);
-        pause.setOnClickListener(this);
-        skip.setOnClickListener(this);
-
+        playerView = findViewById(R.id.playerView);
     }
 
     @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.button_blay:
-                mediaPlayer.start();
-              break;
-            case R.id.button_pause:
-                mediaPlayer.pause();
-              break;
-            case R.id.button_skip:
-                mediaPlayer.seekTo(mediaPlayer.getDuration() / 2);
-              break;
-        }
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        mediaPlayer.setDisplay(holder);
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(mediaPlayer != null) {
-            mediaPlayer.pause();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
+    protected void onStart() {
+        super.onStart();
+        player = ExoPlayerFactory.newSimpleInstance(MainActivity.this, new DefaultTrackSelector());
+        playerView.setPlayer(player);
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(MainActivity.this, getString(R.string.app_name)));
+        MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse("https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4"));
+        player.prepare(videoSource);
     }
 }
