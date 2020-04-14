@@ -9,7 +9,7 @@
         android:layout_margin="10dp"
         android:layout_height="80dp" />
     <TextView
-        android:id="@+id/text_view"
+        android:id="@+id/course_name"
         android:layout_width="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
