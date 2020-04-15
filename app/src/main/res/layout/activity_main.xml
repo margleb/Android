@@ -43,9 +43,18 @@
         android:id="@+id/update_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:textColor="@android:color/white"
         android:background="@color/colorPrimaryDark"
         android:text="UPDATE DATA"
+        />
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimaryDark"
+        android:text="DELETE DATA"
         />
     <TextView
         android:id="@+id/show_note"

@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
@@ -26,13 +27,9 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private EditText add_note;
-    private EditText add_thought;
-    private Button submit_button;
-    private Button show_button;
-    private Button update_button;
-    private TextView show_note;
-    private TextView show_thought;
+    private EditText add_note, add_thought;
+    private Button submit_button, show_button, update_button, delete_button;
+    private TextView show_note, show_thought;
     // ключи
     private static final String KEY_NOTE = "key_note";
     private static final String KEY_THOUGHT = "key_thought";
@@ -54,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String thought = documentSnapshot.getString(KEY_THOUGHT);
                     show_note.setText(note);
                     show_thought.setText(thought);
+                } else {
+                    show_note.setText("");
+                    show_thought.setText("");
                 }
             }
         });
@@ -71,8 +71,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         update_button = findViewById(R.id.update_button);
         show_note = findViewById(R.id.show_note);
         show_thought = findViewById(R.id.show_thought);
+        delete_button = findViewById(R.id.delete_button);
 
         update_button.setOnClickListener(this);
+        delete_button.setOnClickListener(this);
 
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +133,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch(v.getId()) {
             case R.id.update_button:
                 updateData();
+                break;
+            case R.id.delete_button:
+                deleteData();
         }
+    }
+
+    private void deleteData() {
+        Journal.update(KEY_NOTE, FieldValue.delete());
+        // Journal.delete();
     }
 
     private void updateData() {
