@@ -1,10 +1,13 @@
 package com.bawp.myapplication;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,9 +23,9 @@ import java.util.List;
 public class FragmentListCourse extends ListFragment {
 
     List<Course> courses = new CourseData().courseList();
+    private Callbacks activity;
 
-    public FragmentListCourse() {
-    }
+    public FragmentListCourse() { }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,5 +46,21 @@ public class FragmentListCourse extends ListFragment {
         return view;
     }
 
+    public interface Callbacks {
+      public void onItemSelected(Course course);
+    }
 
+    @Override
+    public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
+        // super.onListItemClick(l, v, position, id);
+        Course course = courses.get(position);
+        this.activity.onItemSelected(course);
+        // Toast.makeText(getActivity(), course.getCourseName(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.activity = (Callbacks) context;
+    }
 }

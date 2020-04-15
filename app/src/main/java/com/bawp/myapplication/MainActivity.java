@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.bawp.myapplication.data.Course;
+
+public class MainActivity extends AppCompatActivity implements FragmentListCourse.Callbacks  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +24,10 @@ public class MainActivity extends AppCompatActivity {
 //            fm.beginTransaction().add(R.id.myContainer, fragment).commit();
 //        }
 
+    }
+
+    @Override
+    public void onItemSelected(Course course) {
+        Toast.makeText(MainActivity.this, course.getCourseName(), Toast.LENGTH_SHORT).show();
     }
 }
