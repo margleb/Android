@@ -47,14 +47,14 @@ public class FragmentListCourse extends ListFragment {
     }
 
     public interface Callbacks {
-      public void onItemSelected(Course course);
+      public void onItemSelected(Course course, int position);
     }
 
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         // super.onListItemClick(l, v, position, id);
         Course course = courses.get(position);
-        this.activity.onItemSelected(course);
+        this.activity.onItemSelected(course, position);
         // Toast.makeText(getActivity(), course.getCourseName(), Toast.LENGTH_SHORT).show();
     }
 

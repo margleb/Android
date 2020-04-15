@@ -4,6 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.bawp.myapplication.data.Course;
+import com.bawp.myapplication.data.CourseData;
 
 public class CourseDetailActivity extends AppCompatActivity {
 
@@ -12,9 +17,15 @@ public class CourseDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
         if(savedInstanceState == null) {
-            CourseDetailFragment fragment = new CourseDetailFragment();
+
+            Bundle bundle = getIntent().getExtras();
+            Course course = new CourseData().courseList().get(bundle.getInt("course_id"));
+            // Toast.makeText(getApplicationContext(), course.getCourseName(), Toast.LENGTH_SHORT).show();
+
+            FragmentDetailCourse fragment = new FragmentDetailCourse();
+            fragment.setArguments(bundle);
             FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().add(R.id.detailContainer, fragment).commit();
+            fm.beginTransaction().add(R.id.detail_list_container, fragment).commit();
         }
     }
 }

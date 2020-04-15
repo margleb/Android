@@ -12,11 +12,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bawp.myapplication.data.Course;
+import com.bawp.myapplication.data.CourseData;
 
-public class CourseDetailFragment extends Fragment {
+public class FragmentDetailCourse extends Fragment {
     Course course;
 
-    public CourseDetailFragment() { }
+    public FragmentDetailCourse() { }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if(bundle != null && bundle.containsKey("course_id")) {
+            course = new CourseData().courseList().get(bundle.getInt("course_id"));
+        }
+    }
 
     @Nullable
     @Override
@@ -32,7 +42,7 @@ public class CourseDetailFragment extends Fragment {
             imageView.setImageResource(course.getImageResourceId(getActivity()));
 
             TextView courseDescription = view.findViewById(R.id.course_description);
-            courseName.setText(course.getCourseName());
+            courseDescription.setText(course.getCourseName());
         }
 
         return view;
