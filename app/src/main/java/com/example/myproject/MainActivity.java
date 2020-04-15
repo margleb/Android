@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -20,13 +23,19 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     private EditText add_note;
     private EditText add_thought;
-    private Button submit_botton;
+    private Button submit_button;
+    private Button show_button;
+    private TextView show_note;
+    private TextView show_thought;
     // ключи
     private static final String KEY_NOTE = "key_note";
     private static final String KEY_THOUGHT = "key_thought";
-    private static final String TAG = "ErrorFireStore";
+
     // подключение
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private DocumentReference Journal = firebaseFirestore.collection("Journal").document("Thought");
+
+    private static final String TAG = "ErrorFireStore";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +44,12 @@ public class MainActivity extends AppCompatActivity {
 
         add_note = findViewById(R.id.add_note);
         add_thought = findViewById(R.id.add_thought);
-        submit_botton = findViewById(R.id.submit_botton);
+        submit_button = findViewById(R.id.submit_button);
+        show_button = findViewById(R.id.show_button);
+        show_note = findViewById(R.id.show_note);
+        show_thought = findViewById(R.id.show_thought);
 
-        submit_botton.setOnClickListener(new View.OnClickListener() {
+        submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String note = add_note.getText().toString().trim();
@@ -46,9 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 data.put(KEY_NOTE, note);
                 data.put(KEY_THOUGHT, thought);
 
-                firebaseFirestore
-                        .collection("Journal")
-                        .document("Thought")
+                Journal
                         .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -62,5 +72,28 @@ public class MainActivity extends AppCompatActivity {
                     });
             }
         });
+
+        show_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Journal
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                String note = documentSnapshot.getString(KEY_NOTE);
+                                String thought = documentSnapshot.getString(KEY_THOUGHT);
+                                show_note.setText(note);
+                                show_thought.setText(thought);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                 Log.d(TAG, "onFailure: " + e.getStackTrace());
+                            }
+                });
+            }
+        });
+
     }
 }
