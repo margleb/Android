@@ -3,7 +3,7 @@ package com.bawp.myapplication.data;
 import java.util.ArrayList;
 
 public class CourseData {
-    private String[] courseNames = {"SpangeBob One", "SpangeBob Two", "SpangeBob Three"};
+    private String[] courseNames = {"SpangeBob One", "SpangeBob Two", "SpangeBob Three", "SpangeBob One", "SpangeBob Two", "SpangeBob Three", "SpangeBob One", "SpangeBob Two", "SpangeBob Three", "SpangeBob One", "SpangeBob Two", "SpangeBob Three"};
 
 
     public ArrayList<Course> courseList() {
