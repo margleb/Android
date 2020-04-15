@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +16,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
     private EditText add_note;
@@ -36,6 +41,22 @@ public class MainActivity extends AppCompatActivity {
     private DocumentReference Journal = firebaseFirestore.collection("Journal").document("Thought");
 
     private static final String TAG = "ErrorFireStore";
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Journal.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot != null && documentSnapshot.exists()) {
+                    String note = documentSnapshot.getString(KEY_NOTE);
+                    String thought = documentSnapshot.getString(KEY_THOUGHT);
+                    show_note.setText(note);
+                    show_thought.setText(thought);
+                }
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +102,12 @@ public class MainActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                String note = documentSnapshot.getString(KEY_NOTE);
-                                String thought = documentSnapshot.getString(KEY_THOUGHT);
-                                show_note.setText(note);
-                                show_thought.setText(thought);
+                                if(documentSnapshot != null && documentSnapshot.exists()) {
+                                    String note = documentSnapshot.getString(KEY_NOTE);
+                                    String thought = documentSnapshot.getString(KEY_THOUGHT);
+                                    show_note.setText(note);
+                                    show_thought.setText(thought);
+                                }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -94,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+
 
     }
 }
