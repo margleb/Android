@@ -25,11 +25,12 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText add_note;
     private EditText add_thought;
     private Button submit_button;
     private Button show_button;
+    private Button update_button;
     private TextView show_note;
     private TextView show_thought;
     // ключи
@@ -67,8 +68,11 @@ public class MainActivity extends AppCompatActivity {
         add_thought = findViewById(R.id.add_thought);
         submit_button = findViewById(R.id.submit_button);
         show_button = findViewById(R.id.show_button);
+        update_button = findViewById(R.id.update_button);
         show_note = findViewById(R.id.show_note);
         show_thought = findViewById(R.id.show_thought);
+
+        update_button.setOnClickListener(this);
 
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,5 +124,33 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.update_button:
+                updateData();
+        }
+    }
+
+    private void updateData() {
+        String note = add_note.getText().toString().trim();
+        String thought = add_thought.getText().toString().trim();
+        Map<String, Object> data = new HashMap<>();
+        data.put(KEY_NOTE, note);
+        data.put(KEY_THOUGHT, thought);
+
+        Journal.update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(MainActivity.this, "Updatet Success!", Toast.LENGTH_SHORT);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: " + e.getStackTrace());
+            }
+        });
     }
 }

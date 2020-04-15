@@ -34,9 +34,18 @@
         android:id="@+id/show_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:textColor="@android:color/white"
         android:background="@color/colorPrimaryDark"
         android:text="SHOW DATA"
+        />
+    <Button
+        android:id="@+id/update_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimaryDark"
+        android:text="UPDATE DATA"
         />
     <TextView
         android:id="@+id/show_note"
