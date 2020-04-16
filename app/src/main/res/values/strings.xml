@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MyProject</string>
+    <string name="get_started">Get Started</string>
+    <string name="what_you_do_today">What a your going to do today...</string>
+    <string name="title_text">Self. Gratitiude. Journal</string>
+    <string name="greatful_text">What are you grateful for today?</string>
 </resources>
