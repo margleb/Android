@@ -34,7 +34,8 @@ import javax.annotation.Nullable;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText add_note, add_thought;
     private Button submit_button, show_button, update_button, delete_button;
-    private TextView show_note, show_thought;
+    private TextView show_text;
+    // private TextView show_note, show_thought;
     // ключи
     private static final String KEY_NOTE = "key_note";
     private static final String KEY_THOUGHT = "key_thought";
@@ -49,26 +50,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        JournalThoughtData.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+        JournalData.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if(documentSnapshot != null && documentSnapshot.exists()) {
-
-                    Journal journal = documentSnapshot.toObject(Journal.class);
-
-                    if(journal != null) {
-                        show_note.setText(journal.get_note());
-                        show_note.setText(journal.get_thought());
-                    }
-
-                    // String note = documentSnapshot.getString(KEY_NOTE);
-                    // String thought = documentSnapshot.getString(KEY_THOUGHT);
-                    // show_note.setText(note);
-                    // show_thought.setText(thought);
-                } else {
-                    show_note.setText("");
-                    show_thought.setText("");
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                String data = "";
+                for(QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
+                    Log.d("DoucmentId", "onSuccess: " + snapshots.getId());
+                    Journal journal =  snapshots.toObject(Journal.class);
+                    data += "Note: " + journal.get_note() + " \n" + "Thought: " + journal.get_thought() + " \n\n";
                 }
+                show_text.setText(data);
             }
         });
     }
@@ -83,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         submit_button = findViewById(R.id.submit_button);
         show_button = findViewById(R.id.show_button);
         update_button = findViewById(R.id.update_button);
-        show_note = findViewById(R.id.show_note);
-        show_thought = findViewById(R.id.show_thought);
+        // show_note = findViewById(R.id.show_note);
+        // show_thought = findViewById(R.id.show_thought);
+        show_text = findViewById(R.id.show_text);
         delete_button = findViewById(R.id.delete_button);
 
         update_button.setOnClickListener(this);
@@ -118,9 +110,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         JournalData.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                String data = "";
                 for(QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
                     Log.d("DoucmentId", "onSuccess: " + snapshots.getId());
+                    Journal journal =  snapshots.toObject(Journal.class);
+                    data += "Note: " + journal.get_note() + " \n" + "Thought: " + journal.get_thought() + " \n\n";
                 }
+                show_text.setText(data);
             }
         });
     }
@@ -139,8 +135,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void deleteData() {
-        JournalThoughtData.update(KEY_NOTE, FieldValue.delete());
-        // Journal.delete();
+        // JournalThoughtData.update(KEY_NOTE, FieldValue.delete());
+        JournalThoughtData.delete();
     }
 
     private void updateData() {
