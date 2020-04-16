@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myproject.data.Journal;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -47,10 +48,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if(documentSnapshot != null && documentSnapshot.exists()) {
-                    String note = documentSnapshot.getString(KEY_NOTE);
-                    String thought = documentSnapshot.getString(KEY_THOUGHT);
-                    show_note.setText(note);
-                    show_thought.setText(thought);
+
+                    Journal journal = documentSnapshot.toObject(Journal.class);
+
+                    if(journal != null) {
+                        show_note.setText(journal.get_note());
+                        show_note.setText(journal.get_thought());
+                    }
+
+                    // String note = documentSnapshot.getString(KEY_NOTE);
+                    // String thought = documentSnapshot.getString(KEY_THOUGHT);
+                    // show_note.setText(note);
+                    // show_thought.setText(thought);
                 } else {
                     show_note.setText("");
                     show_thought.setText("");
@@ -81,12 +90,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 String note = add_note.getText().toString().trim();
                 String thought = add_thought.getText().toString().trim();
-                Map<String, Object> data = new HashMap<>();
-                data.put(KEY_NOTE, note);
-                data.put(KEY_THOUGHT, thought);
+                // Map<String, Object> data = new HashMap<>();
+                // data.put(KEY_NOTE, note);
+                // data.put(KEY_THOUGHT, thought);
+
+                Journal journal = new Journal();
+                journal.set_note(note);
+                journal.set_thought(thought);
 
                 Journal
-                        .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        .set(journal).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(MainActivity.this, "Sucess!", Toast.LENGTH_SHORT).show();
@@ -109,10 +122,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 if(documentSnapshot != null && documentSnapshot.exists()) {
-                                    String note = documentSnapshot.getString(KEY_NOTE);
-                                    String thought = documentSnapshot.getString(KEY_THOUGHT);
-                                    show_note.setText(note);
-                                    show_thought.setText(thought);
+
+                                    Journal journal = documentSnapshot.toObject(Journal.class);
+                                    if(journal != null) {
+                                        show_note.setText(journal.get_note());
+                                        show_note.setText(journal.get_thought());
+                                    }
+
+                                    // String note = documentSnapshot.getString(KEY_NOTE);
+                                    // String thought = documentSnapshot.getString(KEY_THOUGHT);
+                                    // show_note.setText(note);
+                                    // show_thought.setText(thought);
                                 }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
