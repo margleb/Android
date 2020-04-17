@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myproject.util.JournalApi;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -114,6 +115,11 @@ public class CreateAccount extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                         if(task.getResult().exists()) {
                                             String userame = task.getResult().getString("username");
+
+                                            JournalApi journalApi = new JournalApi();
+                                            journalApi.setUserId(currentUser.getUid());
+                                            journalApi.setUsername(userame);
+
                                             Intent intent = new Intent(CreateAccount.this, PostJurnalActivity.class);
                                             intent.putExtra("username", userame);
                                             intent.putExtra("userId", currentUser.getUid());
