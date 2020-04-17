@@ -10,4 +10,6 @@
     <string name="choose_button_text">Or</string>
     <string name="create_account_text">CREATE ACCOUNT</string>
     <string name="create_account">Create Account</string>
+    <string name="title">What about this post..</string>
+    <string name="thoughts">Your thoughts...</string>
 </resources>
