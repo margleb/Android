@@ -41,7 +41,7 @@ public class CreateAccount extends AppCompatActivity {
     // экземпляр класса firestore
     private FirebaseFirestore firebaseFireStore = FirebaseFirestore.getInstance();
     // создание журнала firestor
-    private CollectionReference journal = firebaseFireStore.collection("Journal");
+    private CollectionReference journal = firebaseFireStore.collection("Users");
     private TextView username_account;
     private AutoCompleteTextView email_account;
     private EditText password_account;
