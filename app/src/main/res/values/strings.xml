@@ -15,4 +15,5 @@
     <string name="your_username">Your username..</string>
     <string name="add_new_post">Add new Post</string>
     <string name="sign_out">Sign Out</string>
+    <string name="no_post_text">There is no post! Add at least One</string>
 </resources>
