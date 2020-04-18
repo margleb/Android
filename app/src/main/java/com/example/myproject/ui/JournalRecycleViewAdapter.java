@@ -5,10 +5,12 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,13 +55,21 @@ public class JournalRecycleViewAdapter extends RecyclerView.Adapter<JournalRecyc
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView journal_image_view;
-        private TextView journal_title_list, journal_thought_list, journal_timestamp_list;
+        private ImageButton journal_row_share_button;
+        private TextView journal_title_list, journal_thought_list, journal_timestamp_list, journal_row_username;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             journal_image_view = itemView.findViewById(R.id.journal_image_view);
             journal_title_list = itemView.findViewById(R.id.journal_title_list);
             journal_thought_list = itemView.findViewById(R.id.journal_thought_list);
             journal_timestamp_list = itemView.findViewById(R.id.journal_timestamp_list);
+            journal_row_username = itemView.findViewById(R.id.journal_row_username);
+            journal_row_share_button = itemView.findViewById(R.id.journal_row_share_button);
+            journal_row_share_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
         }
     }
 }

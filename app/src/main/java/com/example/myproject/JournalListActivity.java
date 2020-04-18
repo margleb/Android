@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.myproject.model.Journal;
@@ -69,7 +70,6 @@ public class JournalListActivity extends AppCompatActivity {
         no_posts = findViewById(R.id.no_posts);
         journalList = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
