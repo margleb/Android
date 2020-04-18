@@ -13,4 +13,6 @@
     <string name="title">What about this post..</string>
     <string name="thoughts">Your thoughts...</string>
     <string name="your_username">Your username..</string>
+    <string name="add_new_post">Add new Post</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

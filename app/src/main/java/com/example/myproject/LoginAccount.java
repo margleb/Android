@@ -93,7 +93,7 @@ public class LoginAccount extends AppCompatActivity {
                                 journalApi.setUserId(snapshots.getString("userId"));
 
                                 // Go to List Activtiy
-                                startActivity(new Intent(LoginAccount.this, PostJurnalActivity.class));
+                                startActivity(new Intent(LoginAccount.this, JournalListActivity.class));
 
                             }
 
