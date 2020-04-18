@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.myproject.model.Journal;
@@ -35,7 +34,7 @@ public class JournalListActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<Journal> journalList;
     private RecyclerView recyclerView;
-    private CollectionReference collectionReference;
+    private CollectionReference collectionReference = db.collection("Journal");
     private TextView no_posts;
 
     @Override
@@ -44,7 +43,7 @@ public class JournalListActivity extends AppCompatActivity {
         collectionReference.whereEqualTo("userId", JournalApi.getInstance().getUserId()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(queryDocumentSnapshots != null) {
+                if(!queryDocumentSnapshots.isEmpty()) {
                     for(DocumentSnapshot snapshot : queryDocumentSnapshots) {
                         Journal journal = snapshot.toObject(Journal.class);
                         journalList.add(journal);
@@ -69,7 +68,6 @@ public class JournalListActivity extends AppCompatActivity {
         CurrentUser = mAuth.getCurrentUser();
         no_posts = findViewById(R.id.no_posts);
         journalList = new ArrayList<>();
-        collectionReference = db.collection("Journal");
         recyclerView = findViewById(R.id.recyclerView);
 
         recyclerView.setHasFixedSize(true);

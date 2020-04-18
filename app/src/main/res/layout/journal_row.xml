@@ -10,15 +10,22 @@
         android:layout_width="wrap_content"
         android:orientation="vertical"
         android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/journal_image_view"
-        android:adjustViewBounds="true"
-        android:cropToPadding="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/image_three"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
+        <ImageView
+            android:id="@+id/journal_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/image_three" />
+        <TextView
+            android:id="@+id/journal_timestamp_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Date added: "
+            android:textStyle="italic" />
+        <TextView
         android:id="@+id/journal_title_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,13 +39,6 @@
        android:layout_height="wrap_content"
        android:text="This is my thought..."
        android:padding="5dp" />
-    <TextView
-      android:id="@+id/journal_timestamp_list"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textStyle="italic"
-      android:text="Date added: "
-      android:padding="5dp" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

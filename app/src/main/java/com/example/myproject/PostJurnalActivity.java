@@ -30,6 +30,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.net.URL;
 import java.util.Date;
 
 public class PostJurnalActivity extends AppCompatActivity implements View.OnClickListener{
@@ -79,6 +80,7 @@ public class PostJurnalActivity extends AppCompatActivity implements View.OnClic
         if (JournalApi.getInstance() != null) {
             currentUserId = JournalApi.getInstance().getUserId();
             currentUserName = JournalApi.getInstance().getUsername();
+            Log.d("UserName", "onCreate: " + currentUserName);
             user_name.setText(currentUserName);
         }
 
@@ -112,12 +114,9 @@ public class PostJurnalActivity extends AppCompatActivity implements View.OnClic
 
     private void saveJournal() {
         post_progressBar.setVisibility(View.VISIBLE);
-
        final String titlePost = post_title_et.getText().toString().trim();
        final String descriptionPost = post_description_et.getText().toString().trim();
-        Log.d("saveJournal", "saveJournal: " + titlePost);
-        Log.d("saveJournal", "saveJournal: " + descriptionPost);
-        Log.d("saveJournal", "saveJournal: " + imageUri);
+       if(imageUri == null) imageUri = Uri.parse("android.resource://com.example.myproject/" + R.drawable.image_three);
        if(!TextUtils.isEmpty(titlePost) && !TextUtils.isEmpty(descriptionPost) && imageUri != null ) {
            final StorageReference filePath = mStorageRef.child("journal_mages").child("my_image_" + Timestamp.now().getSeconds());
            filePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -168,7 +167,6 @@ public class PostJurnalActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            Log.d("ImageUrl", "onActivityResult2: ");
             if(data != null) {
                 imageUri = data.getData();
                 baground_image.setImageURI(imageUri);

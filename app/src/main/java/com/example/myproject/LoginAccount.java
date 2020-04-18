@@ -81,35 +81,34 @@ public class LoginAccount extends AppCompatActivity {
     private void singIn(String email, String password) {
         progress_bar.setVisibility(View.VISIBLE);
         if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    String currentUserId = user.getUid();
-                    collectionReference.whereEqualTo("userId", currentUserId).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                            if(e != null) {
-                                progress_bar.setVisibility(View.INVISIBLE);
-                                // Log.d("CollectionFindFail", e.printStackTrace());
-                            }
-                            for(QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
-                                JournalApi journalApi = JournalApi.getInstance();
-                                journalApi.setUsername(snapshots.getString("userName"));
-                                journalApi.setUserId(snapshots.getString("userId"));
+                    if(task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String currentUserId = user.getUid();
+                        collectionReference.whereEqualTo("userId", currentUserId).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                if(e != null) {
+                                    progress_bar.setVisibility(View.INVISIBLE);
+                                    // Log.d("CollectionFindFail", e.printStackTrace());
+                                }
+                                for(QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
+                                    JournalApi journalApi = JournalApi.getInstance();
+                                    journalApi.setUsername(snapshots.getString("username"));
+                                    journalApi.setUserId(snapshots.getString("userId"));
 
-                                // Go to List Activtiy
-                                startActivity(new Intent(LoginAccount.this, JournalListActivity.class));
+                                    // Go to List Activtiy
+                                    startActivity(new Intent(LoginAccount.this, JournalListActivity.class));
 
+                                }
                             }
-                        }
-                    });
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progress_bar.setVisibility(View.INVISIBLE);
-                    Log.d("FailedLogin", "onFailure: " + e.getStackTrace());
+                        });
+                    } else {
+                        progress_bar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(LoginAccount.this, "Login failed!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         } else {
