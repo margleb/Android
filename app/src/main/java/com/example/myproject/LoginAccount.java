@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.myproject.model.Journal;
@@ -35,6 +36,7 @@ public class LoginAccount extends AppCompatActivity {
     private Button login_button;
     private Button create_acc_button;
     private AutoCompleteTextView email;
+    private ProgressBar progress_bar;
     private EditText password;
 
 
@@ -53,6 +55,7 @@ public class LoginAccount extends AppCompatActivity {
         create_acc_button = findViewById(R.id.create_acc_button);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
+        progress_bar = findViewById(R.id.progress_bar);
 
         // инициализация базы данных и коллекция пользователей
         db = FirebaseFirestore.getInstance();
@@ -69,12 +72,14 @@ public class LoginAccount extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 singIn(email.getText().toString().trim(), password.getText().toString().trim());
             }
         });
     }
 
     private void singIn(String email, String password) {
+        progress_bar.setVisibility(View.VISIBLE);
         if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -85,6 +90,7 @@ public class LoginAccount extends AppCompatActivity {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                             if(e != null) {
+                                progress_bar.setVisibility(View.INVISIBLE);
                                 // Log.d("CollectionFindFail", e.printStackTrace());
                             }
                             for(QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
@@ -96,17 +102,18 @@ public class LoginAccount extends AppCompatActivity {
                                 startActivity(new Intent(LoginAccount.this, JournalListActivity.class));
 
                             }
-
                         }
                     });
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progress_bar.setVisibility(View.INVISIBLE);
                     Log.d("FailedLogin", "onFailure: " + e.getStackTrace());
                 }
             });
         } else {
+            progress_bar.setVisibility(View.INVISIBLE);
             Toast.makeText(LoginAccount.this, "Field's cannot be empty", Toast.LENGTH_SHORT);
         }
     }
