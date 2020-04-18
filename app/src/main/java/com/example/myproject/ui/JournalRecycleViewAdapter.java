@@ -2,6 +2,7 @@ package com.example.myproject.ui;
 
 import android.content.Context;
 import android.text.format.DateUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,10 +23,15 @@ public class JournalRecycleViewAdapter extends RecyclerView.Adapter<JournalRecyc
     private Context context;
     private List<Journal> journalList;
 
+    public JournalRecycleViewAdapter(Context context, List<Journal> journalList) {
+        this.context = context;
+        this.journalList = journalList;
+    }
+
     @NonNull
     @Override
     public JournalRecycleViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LinearLayout.inflate(context, R.layout.journal_row, parent);
+        View view = LayoutInflater.from(context).inflate(R.layout.journal_row, parent, false);
         return new ViewHolder(view);
         // return null;
     }
