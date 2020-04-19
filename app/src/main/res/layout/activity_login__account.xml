@@ -27,7 +27,8 @@
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/input_outline"
+            android:layout_height="47dp" />
         <EditText
             android:id="@+id/password"
             android:layout_marginTop="15dp"
@@ -35,7 +36,8 @@
             android:hint="@string/password_hint"
             android:maxLines="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/input_outline"
+            android:layout_height="47dp" />
         <Button
             android:id="@+id/email_sign_in_button"
             android:text="@string/login_text"

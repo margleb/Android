@@ -9,6 +9,8 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/centerGColor"
+        android:alpha="0.6"
         android:elevation="10dp"
         android:gravity="end">
         <TextView
@@ -33,6 +35,7 @@
         android:layout_width="wrap_content"
         android:orientation="vertical"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/journal_image_view"
             android:layout_width="match_parent"
@@ -41,6 +44,7 @@
             android:cropToPadding="true"
             android:scaleType="fitXY"
             android:src="@drawable/image_three" />
+
         <TextView
             android:id="@+id/journal_timestamp_list"
             android:layout_width="match_parent"
