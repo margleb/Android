@@ -1,6 +1,8 @@
 package com.example.myproject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -16,6 +18,7 @@ public class Drawing extends View {
     private LinearGradient linearGradient;
     private RadialGradient radialGradient;
     private SweepGradient sweepGradient;
+    private Bitmap bitmap;
     public Drawing(Context context) {
         super(context);
         init();
@@ -44,8 +47,10 @@ public class Drawing extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, 50f, brush);
-        canvas.drawLine(0, 0, getMeasuredWidth() / 2, getMeasuredHeight() / 2, blueBrush);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.dog);
+        canvas.drawBitmap(bitmap, getMeasuredWidth() / 2 - bitmap.getWidth() / 2, getMeasuredHeight() / 2 - bitmap.getHeight() / 2, null);
+        // canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, 50f, brush);
+        // canvas.drawLine(0, 0, getMeasuredWidth() / 2, getMeasuredHeight() / 2, blueBrush);
         super.onDraw(canvas);
     }
 }
