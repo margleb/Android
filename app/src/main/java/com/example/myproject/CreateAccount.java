@@ -60,7 +60,7 @@ public class CreateAccount extends AppCompatActivity {
         password_account = findViewById(R.id.password_account);
         create_account = findViewById(R.id.create_acc_button_login);
         progress_bar = findViewById(R.id.progress_bar);
-
+        getSupportActionBar().setElevation(0);
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

@@ -50,6 +50,7 @@ public class LoginAccount extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login__account);
+        getSupportActionBar().setElevation(0);
 
         login_button = findViewById(R.id.email_sign_in_button);
         create_acc_button = findViewById(R.id.create_acc_button);

@@ -62,6 +62,7 @@ public class PostJurnalActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_jurnal);
        mAuth = FirebaseAuth.getInstance();
+       getSupportActionBar().setElevation(0);
        user_name = findViewById(R.id.user_name);
        time_add = findViewById(R.id.time_add);
        post_title_et = findViewById(R.id.post_title_et);

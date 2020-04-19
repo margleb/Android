@@ -64,6 +64,7 @@ public class JournalListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_journal_list);
         mAuth = FirebaseAuth.getInstance();
         CurrentUser = mAuth.getCurrentUser();
