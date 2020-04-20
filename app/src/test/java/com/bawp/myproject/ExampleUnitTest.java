@@ -1,4 +1,4 @@
-package com.example.myproject;
+package com.bawp.myproject;
 
 import org.junit.Test;
 
